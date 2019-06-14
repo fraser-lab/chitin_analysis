@@ -1,1 +1,6 @@
 relax.py
+
+*.png
+*.xlsx
+*.pkl
+*.csv
