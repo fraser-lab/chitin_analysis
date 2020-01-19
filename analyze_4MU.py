@@ -17,7 +17,7 @@ INITIAL_GUESS = [2000, 0.0001, 1000]
 FILENAME = "/Users/benjaminbarad/Desktop/xlsx/4MU_Kinetic_Purified_20190404_190520.xlsx"
 
 data = pd.read_excel(FILENAME, index_col=0, nrows=96, header=CYCLE_NUMBER_INDEX, skiprows=[CYCLE_NUMBER_INDEX+1]).transpose()
-# data = data.loc[data.index > 500]  
+# data = data.loc[data.index > 500]
 data = data.loc[data.index<2000]
 ### SORT DATA BY FUNCTION
 wt = ["B","A", "C"]
@@ -57,17 +57,17 @@ initial_std_mut = []
 initial_rates_mut_2 =[]
 initial_std_mut_2 = []
 for index, concentration in enumerate(conc):
-	
+
 
 	# no_enzyme_letters = ["{0}{1}".format(i, index+1) for i in no_enzyme]
 	# no_enzyme_control = data[no_enzyme_letters].mean(axis=1)
-	
+
 	wt_letters = ["{0}{1}".format(i, index+1) for i in wt]
 	wt_unadjusted = data[wt_letters].mean(axis=1)
 	wt_adjusted = wt_unadjusted
 	print (wt_adjusted)
 	wt_std = data[wt_letters].std(axis=1)
-	
+
 	rates, covariances, y_calc = relaxation_fit(wt_adjusted.index.values, wt_adjusted, relaxation_function=single_step_relaxation, initial_guess = INITIAL_GUESS, maxfev=30000) #, sigma=wt_std, absolute_sigma=True
 	initial_rates_wt.append(rates[0]*rates[1]*slope)
 	initial_std_wt.append(np.sqrt(covariances[0][0]/(rates[0]**2)+ covariances[1][1]/(rates[1]**2) + 2*covariances[0][1]/(rates[0]*rates[1]))*rates[0]*rates[1]*slope)
@@ -82,7 +82,7 @@ for index, concentration in enumerate(conc):
 	initial_rates_mut.append(rates[0]*rates[1]*slope)
 	print(rates[0]*rates[1]*slope)
 	initial_std_mut.append(np.sqrt(covariances[0][0]/(rates[0]**2)+ covariances[1][1]/(rates[1]**2) + 2*covariances[0][1]/(rates[0]*rates[1]))*rates[0]*rates[1]*slope)
-	
+
 	if index > 2:
 		ax.plot(mut_adjusted.index.values, mut_adjusted,'.')
 		ax.plot(mut_adjusted.index.values, y_calc)
@@ -95,8 +95,8 @@ for index, concentration in enumerate(conc):
 	initial_rates_mut_2.append(rates[0]*rates[1]*slope)
 	initial_std_mut_2.append((np.sqrt(covariances[0][0]/(rates[0]**2)+ covariances[1][1]/(rates[1]**2) + 2*covariances[0][1]/(rates[0]*rates[1]))*rates[0]*rates[1]*slope))
 
-	
-	
+
+
 
 
 
@@ -167,5 +167,3 @@ ax4.set_xticklabels(y_tick_labels)
 ax4.bar(x, y, 0.8, yerr=yerr, color=color_set)
 ax4.set_ylabel(r"kcat/Km $(s•[S])^{-1}$")
 fig4.savefig("3A.png")
-
-

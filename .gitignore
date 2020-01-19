@@ -4,3 +4,5 @@ relax.py
 *.xlsx
 *.pkl
 *.csv
+.DS_Store
+*.pyc
